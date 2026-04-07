@@ -1,0 +1,42 @@
+//Travelling Salesman Problem
+#include <iostream>
+#include <climits>
+using namespace std;
+
+#define V 4
+
+int min(int a, int b) {
+    return (a < b) ? a : b;
+}
+
+// TSP using recursion
+int tsp(int graph[V][V], bool visited[], int curr, int count, int cost, int ans) {
+    
+    if (count == V && graph[curr][0]) {
+        return min(ans, cost + graph[curr][0]);
+    }
+
+    for (int i = 0; i < V; i++) {
+        if (!visited[i] && graph[curr][i]) {
+            visited[i] = true;
+            ans = tsp(graph, visited, i, count + 1, cost + graph[curr][i], ans);
+            visited[i] = false;
+        }
+    }
+
+    return ans;
+}
+
+int main() {
+    int graph[V][V] = {
+        {0, 10, 15, 20},
+        {10, 0, 35, 25},
+        {15, 35, 0, 30},
+        {20, 25, 30, 0}
+    };
+
+    bool visited[V] = {false};
+    visited[0] = true;
+
+    cout << "Minimum Cost: " << tsp(graph, visited, 0, 1, 0, INT_MAX);
+}
